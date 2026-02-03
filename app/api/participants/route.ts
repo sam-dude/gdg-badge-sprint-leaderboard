@@ -85,8 +85,8 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient();
 
-    // Calculate points: (badges * 25) + (posts * 10)
-    const totalPoints = badges * 25 + posts * 10;
+    // Calculate points: (badges * 5) + (posts * 2)
+    const totalPoints = badges * 5 + posts * 2;
 
     // Insert participant
     const { data: participant, error: participantError } = await supabase

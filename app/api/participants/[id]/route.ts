@@ -6,11 +6,11 @@ export const dynamic = "force-dynamic";
 // GET single participant
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = createClient();
-    const { id } = params;
+    const { id } = await params;
 
     const { data, error } = await supabase
       .from("participants")
@@ -39,6 +39,8 @@ export async function GET(
       return NextResponse.json({ error: error.message }, { status: 404 });
     }
 
+    const scores = Array.isArray(data.scores) ? data.scores[0] : data.scores;
+
     const participant = {
       id: data.id,
       name: data.name,
@@ -46,13 +48,12 @@ export async function GET(
       googleDevProfileUrl: data.google_dev_profile_url,
       googleSkillsProfileUrl: data.google_skills_profile_url,
       badges:
-        (data.scores?.google_dev_badges || 0) +
-        (data.scores?.google_skills_badges || 0),
-      posts: data.scores?.social_media_posts || 0,
-      points: data.scores?.total_points || 0,
-      lastScraped: data.scores?.last_scraped,
+        (scores?.google_dev_badges || 0) + (scores?.google_skills_badges || 0),
+      posts: scores?.social_media_posts || 0,
+      points: scores?.total_points || 0,
+      lastScraped: scores?.last_scraped,
       createdAt: data.created_at,
-      updatedAt: data.scores?.updated_at,
+      updatedAt: scores?.updated_at,
     };
 
     return NextResponse.json({ participant }, { status: 200 });
@@ -68,7 +69,7 @@ export async function GET(
 // PUT - Update participant
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const body = await request.json();
@@ -80,7 +81,7 @@ export async function PUT(
       googleDevProfileUrl,
       googleSkillsProfileUrl,
     } = body;
-    const { id } = params;
+    const { id } = await params;
 
     const supabase = createClient();
 
@@ -103,7 +104,7 @@ export async function PUT(
     }
 
     // Calculate points
-    const totalPoints = badges * 25 + posts * 10;
+    const totalPoints = badges * 5 + posts * 2;
 
     // Update score
     const { error: scoreError } = await supabase
@@ -140,11 +141,11 @@ export async function PUT(
 // DELETE participant
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const supabase = createClient();
-    const { id } = params;
+    const { id } = await params;
 
     // Delete participant (cascade will delete score)
     const { error } = await supabase.from("participants").delete().eq("id", id);

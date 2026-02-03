@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
-      const totalPoints = badges * 25 + posts * 10;
+      const totalPoints = badges * 5 + posts * 2;
 
       // Check if participant exists
       const { data: existing } = await supabase
