@@ -61,10 +61,149 @@ export default function Home() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center px-4">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading leaderboard...</p>
+          <p className="text-gray-600 text-lg mb-2">Crunching the results...</p>
+          <p className="text-gray-500 text-sm">Analyzing badges and contributions</p>
         </div>
+      </div>
+    );
+  }
+
+  // Show empty state with how to participate
+  if (!loading && leaderboardData.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50">
+        <header className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+            <div className="flex flex-col items-center justify-center gap-3 text-center">
+              <div className="flex items-center gap-1">
+                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                  <span className="text-white font-bold text-xl">G</span>
+                </div>
+                <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center shadow-md -ml-1.5">
+                  <span className="text-white font-bold text-xl">D</span>
+                </div>
+                <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center shadow-md -ml-1.5">
+                  <span className="text-white font-bold text-xl">G</span>
+                </div>
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">GDG OAU Badge Sprint</h1>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">30-Day Challenge Leaderboard</p>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center mb-12">
+            <div className="text-6xl sm:text-8xl mb-6 animate-bounce">🚀</div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Crunching the Results...
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 mb-8">
+              Our leaderboard is being prepared! While we compile the data,
+              <br className="hidden sm:block" />
+              why not join the challenge?
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 border-2 border-blue-100 mb-8">
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 text-center">
+              🎯 How to Participate
+            </h3>
+
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  1
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-900 mb-2">Register for the Challenge</h4>
+                  <p className="text-gray-600 mb-3">
+                    Sign up for the GDG OAU Badge Sprint 30-Day Learning Challenge
+                  </p>
+                  <a
+                    href="https://gdg.community.dev/events/details/google-gdg-on-campus-obafemi-awolowo-university-ife-nigeria-presents-gdg-oau-badge-sprint-30-day-learning-challenge/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  >
+                    <span>Register Now</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  2
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-900 mb-2">Read the Participants Guide</h4>
+                  <p className="text-gray-600 mb-3">
+                    Learn how to earn badges, share posts, and climb the leaderboard
+                  </p>
+                  <a
+                    href="https://docs.google.com/document/d/1Yfr41eErFXB9-roRWrjmry_zxPkxBrcTIg8OojfUVIU/edit?tab=t.0#heading=h.l7ivtha9s1sm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  >
+                    <span>View Guide</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  3
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-900 mb-2">Join the Community</h4>
+                  <p className="text-gray-600 mb-3">
+                    Connect with fellow participants on Telegram
+                  </p>
+                  <a
+                    href="https://t.me/gdgoau"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.84 8.673c-.137.613-.497.76-.999.473l-2.76-2.034-1.332 1.282c-.147.147-.271.271-.556.271l.199-2.82 5.132-4.638c.223-.199-.049-.309-.346-.111l-6.34 3.992-2.732-.853c-.595-.185-.606-.595.124-.882l10.679-4.116c.495-.182.929.111.769.881z" />
+                    </svg>
+                    <span>Join Telegram</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 sm:p-8 text-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+              📊 What You'll Earn
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+              <div className="bg-white rounded-xl p-4 shadow-md">
+                <div className="text-3xl mb-2">🎖️</div>
+                <p className="font-semibold text-gray-900">5 points per badge</p>
+                <p className="text-sm text-gray-600">Complete skill badges</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 shadow-md">
+                <div className="text-3xl mb-2">📱</div>
+                <p className="font-semibold text-gray-900">2 points per post</p>
+                <p className="text-sm text-gray-600">Share on social media</p>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
