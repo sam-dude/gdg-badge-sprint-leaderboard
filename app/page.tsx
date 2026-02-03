@@ -1,28 +1,74 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Mock data - will be replaced with API data later
-const leaderboardData = [
-  { id: 1, name: "Adewale Johnson", badges: 28, posts: 15, points: 710 },
-  { id: 2, name: "Chioma Okafor", badges: 25, posts: 18, points: 685 },
-  { id: 3, name: "Ibrahim Musa", badges: 24, posts: 12, points: 660 },
-  { id: 4, name: "Funke Adeleke", badges: 22, posts: 10, points: 610 },
-  { id: 5, name: "Emeka Nwosu", badges: 20, posts: 14, points: 590 },
-  { id: 6, name: "Aisha Bello", badges: 19, posts: 11, points: 560 },
-  { id: 7, name: "Oluwaseun Peters", badges: 18, posts: 9, points: 525 },
-  { id: 8, name: "Grace Okoro", badges: 17, posts: 13, points: 510 },
-  { id: 9, name: "Tunde Bakare", badges: 16, posts: 8, points: 480 },
-  { id: 10, name: "Blessing Eze", badges: 15, posts: 10, points: 460 },
-];
+interface Participant {
+  id: number;
+  name: string;
+  badges: number;
+  posts: number;
+  points: number;
+}
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [leaderboardData, setLeaderboardData] = useState<Participant[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchParticipants();
+  }, []);
+
+  const fetchParticipants = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('/api/participants');
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch participants');
+      }
+
+      const data = await response.json();
+      setLeaderboardData(data.participants || []);
+    } catch (err: any) {
+      console.error('Error fetching participants:', err);
+      setError(err.message);
+      // Fallback to mock data if API fails
+      setLeaderboardData([
+        { id: 1, name: "Adewale Johnson", badges: 28, posts: 15, points: 710 },
+        { id: 2, name: "Chioma Okafor", badges: 25, posts: 18, points: 685 },
+        { id: 3, name: "Ibrahim Musa", badges: 24, posts: 12, points: 660 },
+        { id: 4, name: "Funke Adeleke", badges: 22, posts: 10, points: 610 },
+        { id: 5, name: "Emeka Nwosu", badges: 20, posts: 14, points: 590 },
+        { id: 6, name: "Aisha Bello", badges: 19, posts: 11, points: 560 },
+        { id: 7, name: "Oluwaseun Peters", badges: 18, posts: 9, points: 525 },
+        { id: 8, name: "Grace Okoro", badges: 17, posts: 13, points: 510 },
+        { id: 9, name: "Tunde Bakare", badges: 16, posts: 8, points: 480 },
+        { id: 10, name: "Blessing Eze", badges: 15, posts: 10, points: 460 },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredData = leaderboardData.filter((participant) =>
     participant.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading leaderboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
