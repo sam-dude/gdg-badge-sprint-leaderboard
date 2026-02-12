@@ -36,19 +36,7 @@ export default function Home() {
     } catch (err: any) {
       console.error('Error fetching participants:', err);
       setError(err.message);
-      // Fallback to mock data if API fails
-      setLeaderboardData([
-        { id: 1, name: "Adewale Johnson", badges: 28, posts: 15, points: 710 },
-        { id: 2, name: "Chioma Okafor", badges: 25, posts: 18, points: 685 },
-        { id: 3, name: "Ibrahim Musa", badges: 24, posts: 12, points: 660 },
-        { id: 4, name: "Funke Adeleke", badges: 22, posts: 10, points: 610 },
-        { id: 5, name: "Emeka Nwosu", badges: 20, posts: 14, points: 590 },
-        { id: 6, name: "Aisha Bello", badges: 19, posts: 11, points: 560 },
-        { id: 7, name: "Oluwaseun Peters", badges: 18, posts: 9, points: 525 },
-        { id: 8, name: "Grace Okoro", badges: 17, posts: 13, points: 510 },
-        { id: 9, name: "Tunde Bakare", badges: 16, posts: 8, points: 480 },
-        { id: 10, name: "Blessing Eze", badges: 15, posts: 10, points: 460 },
-      ]);
+      setLeaderboardData([]);
     } finally {
       setLoading(false);
     }
