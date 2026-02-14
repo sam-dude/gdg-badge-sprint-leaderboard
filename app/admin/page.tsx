@@ -245,16 +245,8 @@ export default function AdminPage() {
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
                 <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
                     <div className="text-center mb-8">
-                        <div className="flex items-center justify-center gap-2 mb-4">
-                            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
-                                <span className="text-white font-bold text-2xl">G</span>
-                            </div>
-                            <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center shadow-md -ml-2">
-                                <span className="text-white font-bold text-2xl">D</span>
-                            </div>
-                            <div className="w-12 h-12 bg-yellow-400 rounded-lg flex items-center justify-center shadow-md -ml-2">
-                                <span className="text-white font-bold text-2xl">G</span>
-                            </div>
+                        <div className="flex items-center justify-center mb-4">
+                            <img src="/gdg_logo.png" alt="GDG Logo" className="h-16 w-auto" />
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">
                             Admin Access
@@ -313,17 +305,7 @@ export default function AdminPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1">
-                                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
-                                    <span className="text-white font-bold text-xl">G</span>
-                                </div>
-                                <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center shadow-md -ml-1.5">
-                                    <span className="text-white font-bold text-xl">D</span>
-                                </div>
-                                <div className="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center shadow-md -ml-1.5">
-                                    <span className="text-white font-bold text-xl">G</span>
-                                </div>
-                            </div>
+                            <img src="/gdg_logo.png" alt="GDG Logo" className="h-12 w-auto" />
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900">
                                     Admin Dashboard

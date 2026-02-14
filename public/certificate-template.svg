@@ -1,0 +1,67 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f7fafc"/>
+  
+  <!-- Border -->
+  <rect x="40" y="40" width="1120" height="720" fill="none" stroke="#3182ce" stroke-width="20" rx="10"/>
+  
+  <!-- Inner decorative border -->
+  <rect x="80" y="80" width="1040" height="640" fill="none" stroke="#63b3ed" stroke-width="3" rx="5" stroke-dasharray="10,5"/>
+  
+  <!-- Top decoration circles -->
+  <circle cx="150" cy="150" r="30" fill="#bee3f8" opacity="0.5"/>
+  <circle cx="1050" cy="150" r="30" fill="#bee3f8" opacity="0.5"/>
+  
+  <!-- GDG Logo placeholder (You can replace with actual logo) -->
+  <g transform="translate(560, 100)">
+    <circle cx="0" cy="0" r="40" fill="#4285f4"/>
+    <circle cx="30" cy="0" r="40" fill="#ea4335"/>
+    <circle cx="15" cy="30" r="40" fill="#fbbc04"/>
+    <circle cx="15" cy="-30" r="40" fill="#34a853"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="240" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#2d3748" text-anchor="middle">
+    CERTIFICATE OF COMPLETION
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="290" font-family="Arial, sans-serif" font-size="28" fill="#4a5568" text-anchor="middle">
+    GDG OAU Badge Sprint 2026
+  </text>
+  
+  <!-- "This certifies that" text -->
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="24" fill="#718096" text-anchor="middle">
+    This certifies that
+  </text>
+  
+  <!-- Name placeholder (will be replaced by canvas) -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="60" font-weight="bold" fill="#1a202c" text-anchor="middle">
+    [Participant Name]
+  </text>
+  
+  <!-- Achievement text -->
+  <text x="600" y="480" font-family="Arial, sans-serif" font-size="22" fill="#4a5568" text-anchor="middle">
+    has successfully participated in the GDG OAU Badge Sprint
+  </text>
+  <text x="600" y="515" font-family="Arial, sans-serif" font-size="22" fill="#4a5568" text-anchor="middle">
+    and demonstrated commitment to learning and community engagement
+  </text>
+  
+  <!-- Date placeholder -->
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="20" fill="#718096" text-anchor="middle">
+    [Date]
+  </text>
+  
+  <!-- Signature line -->
+  <line x1="450" y1="670" x2="750" y2="670" stroke="#4a5568" stroke-width="2"/>
+  
+  <!-- Signature text -->
+  <text x="600" y="700" font-family="Arial, sans-serif" font-size="18" fill="#4a5568" text-anchor="middle">
+    GDG OAU Organizer
+  </text>
+  
+  <!-- Bottom decoration -->
+  <circle cx="150" cy="700" r="30" fill="#bee3f8" opacity="0.5"/>
+  <circle cx="1050" cy="700" r="30" fill="#bee3f8" opacity="0.5"/>
+</svg>
