@@ -76,11 +76,13 @@ export async function GET(request: NextRequest) {
     console.log("Found participant:", participantData);
 
     // Transform data to match expected format
+    // scores is an array from Supabase relation, get first element
+    const scoresData = participantData.scores?.[0];
     const badges =
-      (participantData.scores?.google_dev_badges || 0) +
-      (participantData.scores?.google_skills_badges || 0);
-    const posts = participantData.scores?.social_media_posts || 0;
-    const points = participantData.scores?.total_points || 0;
+      (scoresData?.google_dev_badges || 0) +
+      (scoresData?.google_skills_badges || 0);
+    const posts = scoresData?.social_media_posts || 0;
+    const points = scoresData?.total_points || 0;
 
     // Check eligibility: at least 1 badge
     const isEligible = badges >= 1;
