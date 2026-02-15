@@ -73,34 +73,29 @@ export default function CertificatePage() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // Set canvas size
-        canvas.width = 1200;
-        canvas.height = 800;
+        // Set canvas size to match new template dimensions
+        canvas.width = 2800;
+        canvas.height = 2000;
 
         // Load and draw the certificate template
         const img = new Image();
         img.crossOrigin = "anonymous";
-        // Try SVG first, fall back to PNG if not found
-        img.src = "/certificate-template.svg";
+        img.src = "/certificate-template.jpeg";
 
         img.onload = () => {
             // Draw the template
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            // Add participant name (centered at Y: 420px)
-            ctx.font = "bold 60px Arial";
+            // Add participant name
+            // Centered horizontally between line start (462) and end (2344)
+            // Positioned at Y: 1150 (highest available space for name)
+            const nameX = (462 + 2344) / 2; // Center of the name line
+            const nameY = 1150;
+
+            ctx.font = "bold 140px Arial";
             ctx.fillStyle = "#1a202c";
             ctx.textAlign = "center";
-            ctx.fillText(participant.name, canvas.width / 2, 420);
-
-            // Add badges earned text (centered at Y: 520px)
-            ctx.font = "32px Arial";
-            ctx.fillStyle = "#4a5568";
-            ctx.fillText(
-                `${participant.badges} Badge${participant.badges !== 1 ? "s" : ""} Earned`,
-                canvas.width / 2,
-                520
-            );
+            ctx.fillText(participant.name, nameX, nameY);
 
             setCertificateGenerated(true);
         };
@@ -112,48 +107,41 @@ export default function CertificatePage() {
 
             // Add border
             ctx.strokeStyle = "#3182ce";
-            ctx.lineWidth = 20;
-            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            ctx.lineWidth = 30;
+            ctx.strokeRect(60, 60, canvas.width - 120, canvas.height - 120);
 
             // Add title
-            ctx.font = "bold 48px Arial";
+            ctx.font = "bold 96px Arial";
             ctx.fillStyle = "#2d3748";
             ctx.textAlign = "center";
-            ctx.fillText("CERTIFICATE OF COMPLETION", canvas.width / 2, 180);
+            ctx.fillText("CERTIFICATE OF COMPLETION", canvas.width / 2, 400);
 
             // Add subtitle
-            ctx.font = "28px Arial";
+            ctx.font = "56px Arial";
             ctx.fillStyle = "#4a5568";
-            ctx.fillText("GDG OAU Badge Sprint", canvas.width / 2, 240);
+            ctx.fillText("GDG OAU Badge Sprint", canvas.width / 2, 520);
 
             // Add "This certifies that"
-            ctx.font = "24px Arial";
-            ctx.fillText("This certifies that", canvas.width / 2, 320);
+            ctx.font = "48px Arial";
+            ctx.fillText("This certifies that", canvas.width / 2, 760);
 
             // Add participant name
-            ctx.font = "bold 60px Arial";
+            const nameX = (462 + 2344) / 2;
+            const nameY = 1150;
+            ctx.font = "bold 140px Arial";
             ctx.fillStyle = "#1a202c";
-            ctx.fillText(participant.name, canvas.width / 2, 420);
-
-            // Add badges earned text
-            ctx.font = "32px Arial";
-            ctx.fillStyle = "#4a5568";
-            ctx.fillText(
-                `${participant.badges} Badge${participant.badges !== 1 ? "s" : ""} Earned`,
-                canvas.width / 2,
-                520
-            );
+            ctx.fillText(participant.name, nameX, nameY);
 
             // Add signature line
             ctx.strokeStyle = "#4a5568";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.moveTo(canvas.width / 2 - 150, 720);
-            ctx.lineTo(canvas.width / 2 + 150, 720);
+            ctx.moveTo(canvas.width / 2 - 300, 1680);
+            ctx.lineTo(canvas.width / 2 + 300, 1680);
             ctx.stroke();
 
-            ctx.font = "18px Arial";
-            ctx.fillText("GDG OAU Organizer", canvas.width / 2, 750);
+            ctx.font = "36px Arial";
+            ctx.fillText("GDG OAU Organizer", canvas.width / 2, 1750);
 
             setCertificateGenerated(true);
         };
@@ -303,7 +291,7 @@ export default function CertificatePage() {
                                     onClick={downloadCertificate}
                                     className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl font-semibold hover:from-emerald-700 hover:to-teal-800 transition-all shadow-lg hover:shadow-xl text-sm sm:text-base"
                                 >
-                                    📥 Download CertificateEarned
+                                    📥 Download Certificate
                                 </button>
                                 <button
                                     onClick={() => {

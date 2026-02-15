@@ -76,8 +76,8 @@ export async function GET(request: NextRequest) {
     console.log("Found participant:", participantData);
 
     // Transform data to match expected format
-    // scores is an array from Supabase relation, get first element
-    const scoresData = participantData.scores?.[0];
+    // scores is a single object from Supabase relation (one-to-one)
+    const scoresData = participantData.scores;
     const badges =
       (scoresData?.google_dev_badges || 0) +
       (scoresData?.google_skills_badges || 0);

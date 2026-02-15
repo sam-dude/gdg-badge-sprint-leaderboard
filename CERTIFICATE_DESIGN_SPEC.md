@@ -16,10 +16,10 @@ Design a certificate template for the GDG OAU Badge Sprint challenge. The certif
 
 ### Canvas Dimensions
 
-- **Width**: 1200 pixels
-- **Height**: 800 pixels
+- **Width**: 2800 pixels
+- **Height**: 2000 pixels
 - **Orientation**: Landscape
-- **Aspect Ratio**: 3:2
+- **Aspect Ratio**: 7:5
 
 ---
 
@@ -40,23 +40,17 @@ Design a certificate template for the GDG OAU Badge Sprint challenge. The certif
 
 ### 3. Text Placeholder Zones 🔴 **CRITICAL**
 
-The system will overlay two pieces of text at these exact coordinates. **Leave these areas CLEAR** of any background patterns or text:
+The system will overlay the participant's name at these exact coordinates. **Leave this area CLEAR** of any background patterns or text:
 
 #### Participant Name
 
-- **Position**: Centered horizontally, 420px from top
-- **Area**: 800px wide x 100px tall (200px, 370px to 1000px, 470px)
-- **Font Style**: Bold, ~60px
+- **Position**: Centered horizontally between X: 462 and X: 2344, at Y: 1150
+- **Center Point**: X: 1403 (midpoint of signature line)
+- **Signature Line**: Starts at (462, 1251) and ends at (2344, 1251)
+- **Font Style**: Bold, ~140px Arial
 - **Color**: Dark (#1a202c)
 - **Purpose**: Participant's full name will be written here
-
-#### Badges Earned
-
-- **Position**: Centered horizontally, 520px from top
-- **Area**: 600px wide x 60px tall (300px, 490px to 900px, 550px)
-- **Font Style**: Regular, ~32px
-- **Color**: Gray (#4a5568)
-- **Purpose**: Text like "5 Badges Earned" will appear here
+- **Note**: Name is positioned above the signature line at Y: 1251
 
 ### 4. Additional Design Elements
 
@@ -75,18 +69,20 @@ Include in the template (these won't be dynamically changed):
 
 ### ✅ DO:
 
-- Make the name zone (Y: 370-470px) visually prominent
+- Make the name zone (around Y: 1150) visually prominent
 - Use contrasting colors to make overlayed text readable
-- Ensure text zones have solid or very light backgrounds
+- Ensure the text zone has solid or very light background
 - Include visual hierarchy that draws attention to the name
-- Add decorative elements around (not on top of) the text zones
+- Keep the signature line at Y: 1251 clear and visible
+- Add decorative elements around (not on top of) the text zone
 - Test the design with sample names of different lengths
 
 ### ❌ DON'T:
 
-- Place any text, patterns, or graphics in the text placeholder zones
-- Use busy backgrounds in the text areas
-- Add decorative lines that cross through Y: 420px or Y: 520px
+- Place any text, patterns, or graphics in the name placeholder zone
+- Use busy backgrounds in the text area (Y: 1050-1200)
+- Add decorative lines that cross through Y: 1150
+- Obscure the signature line at Y: 1251
 - Make the certificate too cluttered
 
 ---
@@ -99,20 +95,21 @@ Include in the template (these won't be dynamically changed):
 ║                  GDG OAU Badge Sprint                       ║
 ║                                                             ║
 ║                                                             ║
+║                                                             ║
+║                                                             ║
 ║     ┌─────────────────────────────────────────────┐       ║
-║ Y:  │                                               │       ║
-║ 370 │         [PARTICIPANT NAME ZONE]               │ 420   ║
-║     │              Keep Clear!                      │       ║
-║ 470 └─────────────────────────────────────────────┘       ║
+║ Y:  │         [PARTICIPANT NAME ZONE]               │       ║
+║1150 │              Keep Clear!                      │       ║
+║     └─────────────────────────────────────────────┘       ║
+║     ════════════════════════════════════════════           ║
+║     ^                                           ^           ║
+║   X:462          Signature Line              X:2344        ║
+║                       (Y:1251)                              ║
 ║                                                             ║
-║     ┌──────────────────────────────────┐                  ║
-║ Y:  │    [BADGES EARNED ZONE]          │ 520              ║
-║ 550 └──────────────────────────────────┘                  ║
 ║                                                             ║
-║                                                             ║
-║                  Signature Line                             ║
+║                   GDG OAU Organizer                         ║
 ╚════════════════════════════════════════════════════════════╝
-    0px                                               1200px
+    0px                                               2800px
 ```
 
 ---
@@ -138,10 +135,10 @@ Please provide:
 
 ## Example Text to Test
 
-- **Name**: "Oluwaseun Adebayo-Johnson"
-- **Badges**: "15 Badges Earned"
+- **Name**: "Oluwaseun Adebayo-Johnson" (long name)
+- **Name**: "John Doe" (short name)
 
-Test with both short and long names to ensure proper fit within the zones.
+Test with both short and long names to ensure proper fit within the zone and good spacing above the signature line.
 
 ---
 
