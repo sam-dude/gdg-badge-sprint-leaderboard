@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 
 interface ParticipantData {
+    id: number;
     name: string;
     email: string;
     badges: number;
@@ -13,15 +14,89 @@ interface ParticipantData {
 export default function CertificatePage() {
     const [searchInput, setSearchInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const [loadingParticipants, setLoadingParticipants] = useState(true);
     const [error, setError] = useState("");
     const [participant, setParticipant] = useState<ParticipantData | null>(null);
     const [isEligible, setIsEligible] = useState(false);
+    const [allParticipants, setAllParticipants] = useState<ParticipantData[]>([]);
+    const [suggestions, setSuggestions] = useState<ParticipantData[]>([]);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [certificateGenerated, setCertificateGenerated] = useState(false);
 
     // Event end date - set this to your event's end date
     const EVENT_END_DATE = new Date("2026-02-16"); // Change this date as needed
     const isEventEnded = new Date() >= EVENT_END_DATE;
+
+    // Fetch all participants on component mount
+    useEffect(() => {
+        fetchAllParticipants();
+    }, []);
+
+    const fetchAllParticipants = async () => {
+        try {
+            setLoadingParticipants(true);
+            const response = await fetch('/api/participants');
+            if (!response.ok) {
+                throw new Error('Failed to fetch participants');
+            }
+            const data = await response.json();
+            setAllParticipants(data.participants || []);
+        } catch (err) {
+            console.error('Error fetching participants:', err);
+            setAllParticipants([]);
+        } finally {
+            setLoadingParticipants(false);
+        }
+    };
+
+    // Calculate string similarity (Levenshtein distance-based)
+    const getSimilarity = (str1: string, str2: string): number => {
+        const s1 = str1.toLowerCase();
+        const s2 = str2.toLowerCase();
+
+        // Exact match
+        if (s1 === s2) return 1;
+
+        // Contains match
+        if (s1.includes(s2) || s2.includes(s1)) return 0.8;
+
+        // Simple Levenshtein distance
+        const longer = s1.length > s2.length ? s1 : s2;
+        const shorter = s1.length > s2.length ? s2 : s1;
+
+        if (longer.length === 0) return 1.0;
+
+        const editDistance = levenshteinDistance(s1, s2);
+        return (longer.length - editDistance) / longer.length;
+    };
+
+    const levenshteinDistance = (str1: string, str2: string): number => {
+        const matrix: number[][] = [];
+
+        for (let i = 0; i <= str2.length; i++) {
+            matrix[i] = [i];
+        }
+
+        for (let j = 0; j <= str1.length; j++) {
+            matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= str2.length; i++) {
+            for (let j = 1; j <= str1.length; j++) {
+                if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+
+        return matrix[str2.length][str1.length];
+    };
 
     useEffect(() => {
         if (participant && isEligible && canvasRef.current) {
@@ -34,6 +109,7 @@ export default function CertificatePage() {
         setError("");
         setParticipant(null);
         setIsEligible(false);
+        setSuggestions([]);
         setCertificateGenerated(false);
 
         if (!searchInput.trim()) {
@@ -41,28 +117,72 @@ export default function CertificatePage() {
             return;
         }
 
-        try {
-            setLoading(true);
-            const response = await fetch(`/api/certificate?search=${encodeURIComponent(searchInput.trim())}`);
+        setLoading(true);
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || "Failed to fetch certificate data");
+        const searchTerm = searchInput.trim().toLowerCase();
+
+        // Try exact match first (email or name)
+        let found = allParticipants.find(
+            p => p.email.toLowerCase() === searchTerm ||
+                p.name.toLowerCase() === searchTerm
+        );
+
+        // If no exact match, try partial match
+        if (!found) {
+            found = allParticipants.find(
+                p => p.email.toLowerCase().includes(searchTerm) ||
+                    p.name.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        // If still no match, find similar names
+        if (!found) {
+            const similarParticipants = allParticipants
+                .map(p => ({
+                    participant: p,
+                    nameSimilarity: getSimilarity(p.name, searchInput),
+                    emailSimilarity: getSimilarity(p.email, searchInput)
+                }))
+                .filter(item => item.nameSimilarity > 0.5 || item.emailSimilarity > 0.5)
+                .sort((a, b) => Math.max(b.nameSimilarity, b.emailSimilarity) - Math.max(a.nameSimilarity, a.emailSimilarity))
+                .slice(0, 5)
+                .map(item => item.participant);
+
+            if (similarParticipants.length > 0) {
+                setSuggestions(similarParticipants);
+                setError(`No exact match found. Did you mean one of these?`);
+            } else {
+                setError("No participant found with this name or email. Please check your spelling.");
             }
-
-            const data = await response.json();
-
-            if (!data.eligible) {
-                setError(data.message || "You are not eligible for a certificate yet.");
-                return;
-            }
-
-            setParticipant(data.participant);
-            setIsEligible(true);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
             setLoading(false);
+            return;
+        }
+
+        // Check eligibility
+        const isEligible = found.badges >= 1;
+
+        setParticipant(found);
+        setIsEligible(isEligible);
+
+        if (!isEligible) {
+            setError("You need at least 1 badge to qualify for a certificate.");
+        }
+
+        setLoading(false);
+    };
+
+    const selectSuggestion = (suggested: ParticipantData) => {
+        setSearchInput(suggested.name);
+        setSuggestions([]);
+        setError("");
+
+        // Auto-submit with the selected suggestion
+        const isEligible = suggested.badges >= 1;
+        setParticipant(suggested);
+        setIsEligible(isEligible);
+
+        if (!isEligible) {
+            setError("You need at least 1 badge to qualify for a certificate.");
         }
     };
 
@@ -157,6 +277,17 @@ export default function CertificatePage() {
         link.click();
     };
 
+    if (loadingParticipants) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 flex items-center justify-center p-4">
+                <div className="text-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4 sm:mb-6"></div>
+                    <p className="text-gray-700 text-base sm:text-lg font-semibold">Loading participants...</p>
+                </div>
+            </div>
+        );
+    }
+
     if (!isEventEnded) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 flex items-center justify-center p-4">
@@ -239,6 +370,27 @@ export default function CertificatePage() {
                             {error && (
                                 <div className="bg-red-50 border-2 border-red-300 rounded-xl p-3 sm:p-4 text-xs sm:text-sm text-red-700 font-medium">
                                     {error}
+                                </div>
+                            )}
+
+                            {suggestions.length > 0 && (
+                                <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-3 sm:p-4">
+                                    <p className="text-xs sm:text-sm text-blue-900 font-semibold mb-2">
+                                        Similar names found:
+                                    </p>
+                                    <div className="space-y-2">
+                                        {suggestions.map((suggested) => (
+                                            <button
+                                                key={suggested.id}
+                                                type="button"
+                                                onClick={() => selectSuggestion(suggested)}
+                                                className="w-full text-left px-3 py-2 bg-white hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors text-xs sm:text-sm"
+                                            >
+                                                <div className="font-semibold text-blue-900">{suggested.name}</div>
+                                                <div className="text-blue-600 text-xs">{suggested.email} • {suggested.badges} badge{suggested.badges !== 1 ? 's' : ''}</div>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
 
